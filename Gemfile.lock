@@ -9,6 +9,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.10.0)
+    em-dir-watcher (0.9.4)
     em-websocket (0.5.1)
       eventmachine (>= 0.12.9)
       http_parser.rb (~> 0.6.0)
@@ -31,15 +32,17 @@ GEM
       guard (~> 2.8)
       guard-compat (~> 1.0)
       multi_json (~> 1.8)
-    guard-shell (0.7.1)
-      guard (>= 2.0.0)
-      guard-compat (~> 1.0)
     http_parser.rb (0.6.0)
+    json (2.0.2)
     libv8 (3.16.14.15)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
       ruby_dep (~> 1.2)
+    livereload (1.6.1)
+      em-dir-watcher (>= 0.1)
+      em-websocket (>= 0.3.5)
+      json (>= 1.5.3)
     lumberjack (1.0.10)
     method_source (0.8.2)
     multi_json (1.12.1)
@@ -78,7 +81,8 @@ DEPENDENCIES
   coffee-script
   guard
   guard-livereload (~> 2.5)
-  guard-shell
+  livereload
+  rb-inotify
   sass
   slim
   therubyracer

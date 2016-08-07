@@ -28,6 +28,10 @@ end
 # Start the server even if no file has changed.
 start_server
 
+guard 'livereload' do
+  watch /^dist.+/
+end
+
 # The guard-shell gem runs a block whenever some set of files has changed.
 guard :shell do
   # This regex matches anything except the dist/ folder

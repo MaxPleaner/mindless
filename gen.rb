@@ -30,17 +30,34 @@ class Gen
   end
   
   def preprocess_styles # => self
-    style_files.each { |file| preprocess_style_file_and_save(file) }
+    sass_files.each { |file| preprocess_sass_file_and_save(file) }
+    css_files.each { |file| copy_css_file(file) }
     self
   end
   
   def preprocess_scripts # => self
-    script_files.each { |file| preprocess_script_file_and_save(file) }
+    coffee_files.each { |file| preprocess_coffee_file_and_save(file) }
+    js_files.each { |file| copy_js_file(file) }
     self
   end
 
   private
   
+  def css_files
+    exclude_dist_folder { Dir.glob("./**/*.css") }
+  end
+  
+  def js_files
+    exclude_dist_folder { Dir.glob("./**/*.js") }
+  end
+  
+  def copy_js_file(path)
+    `cp #{path} #{gen_out_dir}scripts/#{filename_from_path(path)}`
+  end
+  
+  def copy_css_file(path)
+    `cp #{path} #{gen_out_dir}styles/#{filename_from_path(path)}`
+  end
   
   def exclude_dist_folder(&blk) # => array
     blk.call.reject { |path| path.include?("dist/") }
@@ -50,13 +67,13 @@ class Gen
     ENV["GEN_OUT_DIR"] || File.join(`pwd`.chomp, "dist/")
   end
   
-  def preprocess_style_file_and_save(path) # => nil
+  def preprocess_sass_file_and_save(path) # => nil
     dest_path = "#{gen_out_dir}styles/#{filename_from_path(path).gsub(".sass", ".css")}"
     File.open(dest_path, 'w') { |f| f.write Sass::Engine.new(File.read(path)).render }
     nil
   end
   
-  def preprocess_script_file_and_save(path) # => nil
+  def preprocess_coffee_file_and_save(path) # => nil
     dest_path = "#{gen_out_dir}scripts/#{filename_from_path(path).gsub(".coffee", ".js")}"
     File.open(dest_path, 'w') { |f| f.write CoffeeScript.compile(File.read(path)) }
     nil
@@ -66,7 +83,7 @@ class Gen
     exclude_partials { exclude_dist_folder { Dir.glob("./**/*.slim") } }
   end
   
-  def style_files # => array
+  def sass_files # => array
     exclude_dist_folder { Dir.glob("./**/*.sass") }
   end
   
@@ -74,7 +91,7 @@ class Gen
     blk.call.reject { |path| filename_from_path(path)[0] == "_" }
   end
   
-  def script_files # => array
+  def coffee_files # => array
     exclude_dist_folder { Dir.glob("./**/*.coffee") }
   end
   
