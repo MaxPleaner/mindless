@@ -30,6 +30,7 @@ def compile
 end
 
 # Start the server even if no file has changed.
+compile
 start_server
 
 guard 'livereload' do
