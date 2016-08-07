@@ -12,10 +12,6 @@ class Gen
     self.class.class_exec { include Helpers }
     @gen_out_dir = get_gen_out_dir
   end
-
-  def start_webrick! # => blocking
-    WEBrick::HTTPServer.new(:Port => 8000, :DocumentRoot => gen_out_dir).start
-  end
   
   def refresh_gen_out_dir # => self
     `rm -rf #{gen_out_dir}; mkdir #{gen_out_dir}`
@@ -119,11 +115,13 @@ module Helpers
     raise(PartialNotFoundError, "#{filename} can't be located in this directory's file tree") unless source
     preprocess_slim_file(source)
   end
+  def grid_sections # => array of html strings
+    Array.new(30) { "<b>Lorum ipsum ... </b>" }
+  end
 end
 
 Gen.new.refresh_gen_out_dir
        .preprocess_scripts
        .preprocess_styles
        .preprocess_slim
-       .start_webrick!
 
