@@ -3,7 +3,7 @@ require 'slim'
 require 'sass'
 require 'coffee-script'
 require 'webrick'
-require 'listen'
+require 'rerun'
 
 class Gen
 
@@ -13,11 +13,10 @@ class Gen
     @gen_out_dir = get_gen_out_dir
   end
 
-  def start_webrick_with_rerun! # => blocking
-    Listen.to(`pwd`.chomp) { |modified, added, removed| start_webrick! }.start
-    File.open(__FILE__) { |f| w.write(File.read(f)) }
+  def start_webrick! # => blocking
+    WEBrick::HTTPServer.new(:Port => 8000, :DocumentRoot => gen_out_dir).start
   end
-
+  
   def refresh_gen_out_dir # => self
     `rm -rf #{gen_out_dir}; mkdir #{gen_out_dir}`
     `mkdir #{gen_out_dir}scripts/`
@@ -42,9 +41,6 @@ class Gen
 
   private
   
-  def start_webrick! # => blocking
-    WEBrick::HTTPServer.new(:Port => 8000, :DocumentRoot => gen_out_dir).start
-  end
   
   def exclude_dist_folder(&blk) # => array
     blk.call.reject { |path| path.include?("dist/") }

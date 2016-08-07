@@ -1,4 +1,4 @@
 (function() {
-  alert("OK");
+  alert("OasdasdK");
 
 }).call(this);

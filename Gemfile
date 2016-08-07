@@ -6,4 +6,4 @@ gem "slim"
 gem "sass"
 gem "coffee-script"
 gem "therubyracer"
-gem 'listen', '~> 3.0'
+gem 'rerun'
