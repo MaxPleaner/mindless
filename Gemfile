@@ -6,4 +6,7 @@ gem "slim"
 gem "sass"
 gem "coffee-script"
 gem "therubyracer"
-gem 'rerun'
+gem "guard"
+gem "guard-shell"
+gem "childprocess"
+gem 'guard-livereload', '~> 2.5', require: false

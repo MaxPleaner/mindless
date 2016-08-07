@@ -108,5 +108,5 @@ Gen.new.refresh_gen_out_dir
        .preprocess_scripts
        .preprocess_styles
        .preprocess_slim
-       .start_webrick_with_rerun!
+       .start_webrick!
 
