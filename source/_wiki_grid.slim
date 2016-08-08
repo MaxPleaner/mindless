@@ -1,3 +1,6 @@
 div.grid
-  - grid_sections.each do |section|
-    div.grid-item == section
+  - Dir.glob("./source/markdown/*.md.erb").each do |file|
+    div.grid-item
+      = file.split("/")[-1].split(".")[0]
+      div.content == process_md_erb(file)
+      

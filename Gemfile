@@ -1,5 +1,8 @@
 source "http://rubygems.org"
 
+# silence annoying warnings
+ENV['RUBY_DEP_GEM_SILENCE_WARNINGS'] = '1'
+
 # debugging
 gem "byebug"
 
