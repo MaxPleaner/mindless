@@ -1,6 +1,9 @@
 div.grid
-  - Dir.glob("./source/markdown/*.md.erb").each do |file|
+  - md_erb_files.each do |file|
+    - file_html, file_metadata = process_md_erb(file)
     div.grid-item
-      = file.split("/")[-1].split(".")[0]
-      div.content == process_md_erb(file)
-      
+      = file_title(file)
+      hr
+      div.metadata = file_metadata.to_h.to_json
+      div.content
+        == file_html
