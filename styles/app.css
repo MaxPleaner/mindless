@@ -57,3 +57,9 @@ hr {
 .selected-grid-item {
   box-shadow: 0 0 5px orange;
   background-color: rgba(255, 210, 128, 0.2); }
+
+#intro {
+  display: inline-block;
+  background-color: rgba(253, 195, 188, 0.4);
+  padding: 10px;
+  margin: 20px; }
