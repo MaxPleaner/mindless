@@ -28,11 +28,15 @@
   };
 
   isotopeFilterFn = function() {
-    var currentTag, isVisible, tags;
+    var currentTags, isVisible, tags;
     tags = $(this).data("tags");
-    currentTag = window.currentTag;
-    if (currentTag) {
-      isVisible = (tags.length > 0) && tags.includes(currentTag);
+    currentTags = window.currentTags || [];
+    if (currentTags.some(function(tag) {
+      return tag.length > 0;
+    })) {
+      isVisible = (tags.length > 0) && currentTags.some(function(tag) {
+        return (tag.length > 0) && tags.includes(tag);
+      });
     } else {
       isVisible = true;
     }
@@ -71,30 +75,45 @@
     $gridItems.on("mouseleave", gridItemOnMouseleave);
     $togglingContent.on("mouseenter", togglingContentOnMouseenter);
     $togglingContent.on("mouseleave", togglingContentOnMouseleave);
+    $grid.isotope;
+    return refreshGrid($grid);
+  };
+
+  refreshGrid = function($grid) {
     return $grid.isotope({
       itemSelector: '.grid-item',
       layoutMode: 'fitRows'
     });
   };
 
-  refreshGrid = function($grid) {
-    return $grid.isotope();
-  };
-
   loadInitialState = function($grid) {
-    var currentTag;
-    currentTag = window.location.hash.replace("#", "");
-    if (currentTag.length > 0) {
-      window.currentTag = currentTag;
-      return filterGrid($grid);
+    var currentTags;
+    currentTags = window.location.hash.replace("#", "").split(",");
+    if (currentTags.length > 0) {
+      window.currentTags = currentTags;
+      filterGrid($grid);
+      return window.currentTags.forEach(function(tag) {
+        return $grid.find(".tagLink[data-tag='" + tag + "']").addClass("selectedTag");
+      });
     }
   };
 
   metadataOnClick = function($grid, e) {
-    var tag;
-    tag = $(e.currentTarget).text();
-    window.location.hash = tag;
-    window.currentTag = tag;
+    var $node, idx, tag;
+    $node = $(e.currentTarget);
+    tag = $node.text();
+    if ($node.hasClass("selectedTag")) {
+      $node.removeClass("selectedTag");
+      idx = window.currentTags.indexOf(tag);
+      if (idx > -1) {
+        window.currentTags.splice(idx, 1);
+      }
+    } else {
+      $node.addClass("selectedTag");
+      window.currentTags || (window.currentTags = []);
+      window.currentTags.push(tag);
+    }
+    window.location.hash = window.currentTags.join(",");
     filterGrid($grid);
     return e.preventDefault();
   };
@@ -121,7 +140,7 @@
     tags = Array.from(new Set(tags));
     tags.forEach(function(tag) {
       var tagLink;
-      tagLink = $("<a></a>").html(tag).addClass("tagLink").attr("href", "#");
+      tagLink = $("<a></a>").html(tag).addClass("tagLink").data("tag", tag).attr("href", "#");
       return $navbarTagsMenu.append(tagLink);
     });
     addButtonToShowAll($grid, $navbarTagsMenu);
@@ -137,7 +156,7 @@
 
   showAllButtonOnClick = function($grid, e) {
     window.location.hash = "";
-    window.currentTag = void 0;
+    window.currentTags = void 0;
     filterGrid($grid);
     return e.preventDefault();
   };

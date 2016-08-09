@@ -63,3 +63,6 @@ hr {
   background-color: rgba(253, 195, 188, 0.4);
   padding: 10px;
   margin: 20px; }
+
+.selectedTag {
+  border: 3px solid purple; }

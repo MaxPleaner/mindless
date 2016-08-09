@@ -18,12 +18,11 @@ gridItemOnClick = ($grid, e) ->
 hideAllContent = ($grid) ->
   $grid.find(".content").addClass "hidden"
   
-
 isotopeFilterFn = () ->
   tags = $(this).data "tags"
-  currentTag = window.currentTag
-  if currentTag
-    isVisible = (tags.length > 0) && tags.includes(currentTag)
+  currentTags = window.currentTags || []
+  if currentTags.some((tag) -> tag.length > 0)
+    isVisible = (tags.length > 0) && currentTags.some( (tag) -> (tag.length > 0) && tags.includes(tag) )
   else
     isVisible = true
   return isVisible
@@ -54,22 +53,34 @@ setupGrid = ($grid, $gridItems, $togglingContent) ->
   $togglingContent.on "mouseenter", togglingContentOnMouseenter
   $togglingContent.on "mouseleave", togglingContentOnMouseleave
   $grid.isotope
-    itemSelector: '.grid-item'
-    layoutMode: 'fitRows'
+  refreshGrid($grid)
   
 refreshGrid = ($grid) ->
-  $grid.isotope() # no need to re-supply initialization options
+  $grid.isotope
+    itemSelector: '.grid-item'
+    layoutMode: 'fitRows'
 
 loadInitialState = ($grid) ->
-  currentTag = window.location.hash.replace "#", ""
-  if currentTag.length > 0
-    window.currentTag = currentTag
+  currentTags = window.location.hash.replace("#", "").split(",")
+  if currentTags.length > 0
+    window.currentTags = currentTags
     filterGrid $grid
+    window.currentTags.forEach (tag) ->
+      $grid.find(".tagLink[data-tag='#{tag}']").addClass("selectedTag")
 
 metadataOnClick = ($grid, e) ->
-  tag = $(e.currentTarget).text()
-  window.location.hash = tag
-  window.currentTag = tag
+  $node = $ e.currentTarget
+  tag = $node.text()
+  if $node.hasClass("selectedTag")
+    $node.removeClass("selectedTag")
+    idx = window.currentTags.indexOf tag
+    if idx > -1
+      window.currentTags.splice(idx, 1)
+  else
+    $node.addClass("selectedTag")
+    window.currentTags ||= []
+    window.currentTags.push tag
+  window.location.hash = window.currentTags.join(",")
   filterGrid $grid
   e.preventDefault()
 
@@ -91,6 +102,7 @@ buildNavbarTagsMenu = ($grid, $metadata) ->
   tags.forEach (tag) ->
       tagLink = $("<a></a>").html(tag)
                             .addClass("tagLink")
+                            .data("tag", tag)
                             .attr("href", "#")
       $navbarTagsMenu.append tagLink
   addButtonToShowAll $grid, $navbarTagsMenu
@@ -105,7 +117,7 @@ addButtonToShowAll = ($grid, $navbarTagsMenu) ->
   
 showAllButtonOnClick = ($grid, e) ->
   window.location.hash = ""
-  window.currentTag = undefined
+  window.currentTags = undefined
   filterGrid $grid
   e.preventDefault()
   
