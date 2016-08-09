@@ -124,7 +124,7 @@ bringBackiFrame = ($gridItem) ->
   if $iframe
     resetAlliFrames()
     $iframe.attr "src", ($iframe.data("src") + "?vq=tiny")
-    
+  
 $ () ->
 
   $grid            = $ ".grid"

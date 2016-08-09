@@ -6,17 +6,42 @@ It's mainly intended to create a responsive grid with toggling sections.
 
 There is also the option to filter the visible content according to a selected 'tag', as inspired by [bento.io/grid](https://bento.io/grid)
 
-### There are a few components:
+### General usage, tl;dr
 
-1. The [genrb](http://github.com/maxpleaner/genrb) guard / livereload setup for compiling apps built with coffeescript, sass, and slim. It also provides a static http server
+Only `.md.erb` files are needed to populate the site with content. They can be anywhere in the directory tree except `dist/`.
+
+A sample file is as follows (say it's `test.md.erb`)
+
+```md
+**METADATA**
+TAGS: foo, bar
+****
+
+#### this is a markdown page
+_use markdown here_
+
+#### it supports erb
+<%= "or erb" %>
+
+#### there is a helper method to embed other markdown
+<%= embed_markdown("./path/to/file.md.erb") %>
+```
+
+Once this file is saved, run `ruby gen.rb` to compile the app into `dist/` and `sh push_dist_to_gh_pages` to deploy. `guard` is used to start the development server. The livereload chrome extension should be installed, but is not necessary.
+
+With this markdown file, `foo` and `bar` will appear in the navbar as tags. The markdown file becomes a box in the grid and has these tags applied for the filter-by-tag feature to see. Initially, the box will only have the title visible  (`test`, taken from the filename). When the title is clicked, the markdown content will toggle open/closed. Only one box can be toggled open at the same time.
+
+### Main components
+
+1. The [genrb](http://github.com/maxpleaner/genrb) guard / livereload setup for compiling apps that are built with coffeescript, sass, and slim. It also provides a static http server
 2. A ui library which supports nested markdown and slim templates
-3. An API for seeding data
+3. A simple method for seeding `.md.erb` pages: `Seed.create`
 4. A script to deploy to github pages
 
 ### How it's organized:
 
 - `dist/` is the destination for the compiled app. It has a `scripts/` folder which is the destination for all `.js` files, and a `styles/` folder which is the destination for `css`. All `html` files are copied into the root level of `dist/`, and since a static server is used, they are routed to urls automatically.
-- `.md.erb`, `.coffee`, `.sass`, `.css`, `.js`, and `.slim` source files can be present _anywhere in the file tree except `dist/`_. In this app, slim templates are written in the root level of `source/`, and other files are placed in `source/markdown`, `source/scripts`, and `source/styles`, but this organization is _not hard coded_.
+- `.md.erb`, `.coffee`, `.sass`, `.css`, `.js`, and `.slim` source files can be present anywhere in the file tree except `dist/`. When the app is cloned, slim templates will be present in the root level of `source/`, and other files are present in `source/markdown`, `source/scripts`, and `source/styles`, but this organization is not hard coded and these files can be moved.
 - The ui library is in `source/scripts/app.coffee`. It uses [isotope](http://isotope.metafizzy.co/) for the responsive grid,  `jquery`, [pace](http://github.hubspot.com/pace/docs/welcome/), and [curry](https://github.com/dominictarr/curry).
 - [genrb](http://github.com/maxpleaner/genrb) provides `gen.rb` and the `Guardfile`.
   - `gen.rb` compiles `source/` into `dist/`. If given file paths as arguments, it will only compile those files, but otherwise will compile everything.
