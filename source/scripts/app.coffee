@@ -3,8 +3,13 @@ gridItemOnClick = ($grid, e) ->
   $el = $ e.currentTarget
   if $grid.find(".content:not(.hidden)").length > 0
     hideAllContent($grid)
-  $($el.find(".content")[0]).toggleClass "hidden"
-  bringBackiFrame($el)
+    resetAlliFrames()
+  else
+    $content = $ $el.find(".content")[0]
+    $content.removeClass("hidden")
+    src = $content.find("iframe").attr("src")
+    if !src || (src.length == 0)
+      bringBackiFrame($el)
   refreshGrid($grid)
   
 hideAllContent = ($grid) ->

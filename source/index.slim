@@ -10,6 +10,15 @@ html
     script src='./scripts/curry.min.js'
     script src='./scripts/app.js'
   body
+    div#intro
+      h4 Watch some playlists!
+      h5 Click a tag to filter
+      h5 Click a playlist name to see the video
+      h5
+        a href='http://github.com/maxpleaner/static'
+          | project source
+      
+        
     container#all-content
       == render("_nav.slim")
       == render("_wiki_grid.slim")
