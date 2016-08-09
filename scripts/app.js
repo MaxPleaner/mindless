@@ -143,17 +143,13 @@
   };
 
   resetAlliFrames = function() {
-    return $.each($("iframe"), function(idx, node) {
-      var $node, dataSrc, src;
-      $node = $(node);
+    var $node, src;
+    $node = window.$activeIframe;
+    if ($node) {
       src = $node.attr("src");
-      dataSrc = $node.data("src");
-      if (src && src.length > 1) {
-        dataSrc = src;
-      }
-      $node.data("src", dataSrc);
-      return $node.attr("src", "");
-    });
+      $node.data("src", src);
+      return $node.removeAttr("src");
+    }
   };
 
   bringBackiFrame = function($gridItem) {
@@ -161,7 +157,8 @@
     $iframe = $gridItem.find("iframe");
     if ($iframe) {
       resetAlliFrames();
-      return $iframe.attr("src", $iframe.data("src") + "?vq=tiny");
+      $iframe.attr("src", $iframe.data("src") + "&vq=tiny");
+      return window.$activeIframe = $iframe;
     }
   };
 
