@@ -135,6 +135,11 @@ bringBackiFrame = ($gridItem) ->
     $iframe.attr "src", ($iframe.data("src") + "&vq=tiny")
     window.$activeIframe = $iframe
   
+  
+finalize = () ->
+  $("#loading").remove()
+  $("#all-content").removeAttr "id"
+  
 $ () ->
 
   $grid            = $ ".grid"
@@ -144,6 +149,7 @@ $ () ->
   
   setupMetadata $grid, $metadata
   loadInitialState $grid
+  finalize()
   setupGrid $grid, $gridItems, $togglingContent
 
     
