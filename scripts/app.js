@@ -2,14 +2,18 @@
   var addButtonToShowAll, bringBackiFrame, buildNavbarTagsMenu, filterGrid, gridItemOnClick, gridItemOnMouseenter, gridItemOnMouseleave, hideAllContent, isotopeFilterFn, loadInitialState, metadataOnClick, refreshGrid, resetAlliFrames, setupGrid, setupMetadata, showAllButtonOnClick, togglingContentOnMouseenter, togglingContentOnMouseleave;
 
   gridItemOnClick = function($grid, e) {
-    var $content, $el, src;
+    var $content, $el, contentAlreadyHidden, src;
     e.stopPropagation();
     $el = $(e.currentTarget);
+    $content = $($el.find(".content")[0]);
     if ($grid.find(".content:not(.hidden)").length > 0) {
+      contentAlreadyHidden = $content.hasClass("hidden");
       hideAllContent($grid);
       resetAlliFrames();
+      if (contentAlreadyHidden) {
+        $content.removeClass("hidden");
+      }
     } else {
-      $content = $($el.find(".content")[0]);
       $content.removeClass("hidden");
       src = $content.find("iframe").attr("src");
       if (!src || (src.length === 0)) {
