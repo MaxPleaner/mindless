@@ -58,3 +58,7 @@ TAGS: comma, separated, list, of, tags
 ### Starting the app
 
 `clone`, `bundle`, and `guard`, then visit `localhost:8000`
+
+### Demo
+
+visit [http://maxpleaner.github.io/static](http://maxpleaner.github.io/static), which shows a bunch of youtube playlists that are tagged by genre
