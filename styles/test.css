@@ -1,13 +1,61 @@
-a {
-  font-size: 25px; }
+body, html {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2); }
+
+a, a:visited, a:hover {
+  color: darkblue;
+  font-style: italic;
+  text-decoration: none; }
 
 .grid-item {
-  border: 1px solid blue;
+  transition: box-shadow 0.25s ease-in;
+  transition: background-color 0.75s ease-in;
+  border: 1px solid black;
   margin: 10px;
   padding: 10px;
-  width: auto;
-  height: auto; }
+  border-radius: 5px; }
 
 .hidden {
-  visibility: hidden;
   display: none; }
+
+.tagLink, .showAllLink {
+  float: left;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 5px;
+  transition: box-shadow 0.25s ease-in;
+  transition: background-color 0.75s ease-in; }
+  .tagLink:hover, .showAllLink:hover {
+    box-shadow: 0 0 5px orange;
+    background-color: rgba(255, 128, 128, 0.2); }
+
+.tagLink:nth-child(2), .showAllLink:nth-child(2) {
+  clear: left; }
+
+.showAllLink {
+  border: 1px solid darkred; }
+
+.grid {
+  clear: both;
+  margin: 50px; }
+
+#navbarTags {
+  float: left;
+  margin: 50px; }
+
+hr {
+  clear: both;
+  color: red;
+  background-color: black;
+  height: 1px;
+  border-width: 0; }
+
+.content {
+  background-color: rgba(253, 195, 188, 0.25);
+  padding: 10px; }
+
+.selected-grid-item {
+  box-shadow: 0 0 5px orange;
+  background-color: rgba(255, 210, 128, 0.2); }
