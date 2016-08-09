@@ -74,8 +74,9 @@ module Helpers
   end
   
   # A list of .md.erb file paths
+  # Ignores readmes
   def md_erb_files
-    Dir.glob("./source/markdown/*.md.erb")
+    Dir.glob("**/*.md.erb").reject { |path| path.include "README" }
   end
   
   # Transform /my/path/name.txt into 'name'
