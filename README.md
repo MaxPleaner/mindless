@@ -35,6 +35,8 @@ There is also the option to filter the visible content according to a selected '
 - _grid_
   - `.grid` denotes a grid. There should be only one of these.
   - `.grid-item` is a box in the grid. There are no exclicit defitions for 'columns' or 'rows' here - all that is handled dynamically by isotope. 
+  - inside `.grid-item` nodes, `.content` is initially hidden but is toggled open by clicking on the `.grid-item`.
+  - Toggling content can be nested - just include another `.grid-item` inside `.content`
 
 **in markdown files**
 - _embedding_
