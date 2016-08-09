@@ -34,4 +34,4 @@ module Seed
   
 end
 
-Seed.seed_youtube_playlists ["drums"]
+Seed.seed_youtube_playlists ["grindcore"]
