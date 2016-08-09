@@ -2,21 +2,16 @@ gridItemOnClick = ($grid, e) ->
   e.stopPropagation()
   $el = $ e.currentTarget
   $content = $ $el.find(".content")[0]
-  if $grid.find(".content:not(.hidden)").length > 0
-    contentAlreadyHidden = $content.hasClass "hidden"
-    hideAllContent $grid
+  $contentAlreadyVisible = $grid.find(".content:not(.hidden)")
+  if $contentAlreadyVisible.length > 0
+    $contentAlreadyVisible.addClass "hidden"
     resetAlliFrames()
-    if contentAlreadyHidden
-      $content.removeClass "hidden"
   else
-    $content.removeClass "hidden"
     src = $content.find("iframe").attr "src"
     if !src || (src.length == 0)
       bringBackiFrame $el
+  $content.removeClass("hidden")
   refreshGrid $grid
-  
-hideAllContent = ($grid) ->
-  $grid.find(".content").addClass "hidden"
   
 isotopeFilterFn = () ->
   tags = $(this).data "tags"
