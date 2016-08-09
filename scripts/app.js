@@ -1,12 +1,20 @@
 (function() {
-  var addButtonToShowAll, buildNavbarTagsMenu, filterGrid, gridItemOnClick, gridItemOnMouseenter, gridItemOnMouseleave, isotopeFilterFn, loadInitialState, metadataOnClick, refreshGrid, setupGrid, setupMetadata, showAllButtonOnClick, togglingContentOnMouseenter, togglingContentOnMouseleave;
+  var addButtonToShowAll, bringBackiFrame, buildNavbarTagsMenu, filterGrid, gridItemOnClick, gridItemOnMouseenter, gridItemOnMouseleave, hideAllContent, isotopeFilterFn, loadInitialState, metadataOnClick, refreshGrid, resetAlliFrames, setupGrid, setupMetadata, showAllButtonOnClick, togglingContentOnMouseenter, togglingContentOnMouseleave;
 
   gridItemOnClick = function($grid, e) {
     var $el;
     e.stopPropagation();
     $el = $(e.currentTarget);
+    if ($grid.find(".content:not(.hidden)").length > 0) {
+      hideAllContent($grid);
+    }
     $($el.find(".content")[0]).toggleClass("hidden");
+    bringBackiFrame($el);
     return refreshGrid($grid);
+  };
+
+  hideAllContent = function($grid) {
+    return $grid.find(".content").addClass("hidden");
   };
 
   isotopeFilterFn = function() {
@@ -36,11 +44,11 @@
   };
 
   togglingContentOnMouseenter = function(e) {
-    return $(e.currentTarget).parent(".grid-item").removeClass("selected-grid-item");
+    return $(e.currentTarget).parents(".grid-item").removeClass("selected-grid-item");
   };
 
   togglingContentOnMouseleave = function(e) {
-    return $(e.currentTarget).parent(".grid-item").addClass("selected-grid-item");
+    return $(e.currentTarget).parents(".grid-item").addClass("selected-grid-item");
   };
 
   setupGrid = function($grid, $gridItems, $togglingContent) {
@@ -97,9 +105,10 @@
       $node = $(node);
       nodeJson = $node.text();
       tags = JSON.parse(nodeJson)['tags'];
-      $node.parent(".grid-item").data("tags", tags);
+      $node.parents(".grid-item").data("tags", tags);
       return tags;
     });
+    tags = Array.from(new Set(tags));
     tags.forEach(function(tag) {
       var tagLink;
       tagLink = $("<a></a>").html(tag).addClass("tagLink").attr("href", "#");
@@ -121,6 +130,29 @@
     window.currentTag = void 0;
     filterGrid($grid);
     return e.preventDefault();
+  };
+
+  resetAlliFrames = function() {
+    return $.each($("iframe"), function(idx, node) {
+      var $node, dataSrc, src;
+      $node = $(node);
+      src = $node.attr("src");
+      dataSrc = $node.data("src");
+      if (src && src.length > 1) {
+        dataSrc = src;
+      }
+      $node.data("src", dataSrc);
+      return $node.attr("src", "");
+    });
+  };
+
+  bringBackiFrame = function($gridItem) {
+    var $iframe;
+    $iframe = $gridItem.find("iframe");
+    if ($iframe) {
+      resetAlliFrames();
+      return $iframe.attr("src", $iframe.data("src"));
+    }
   };
 
   $(function() {
