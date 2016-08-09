@@ -161,7 +161,7 @@
     $iframe = $gridItem.find("iframe");
     if ($iframe) {
       resetAlliFrames();
-      return $iframe.attr("src", $iframe.data("src"));
+      return $iframe.attr("src", $iframe.data("src") + "?vq=tiny");
     }
   };
 

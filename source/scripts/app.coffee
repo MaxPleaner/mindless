@@ -123,8 +123,8 @@ bringBackiFrame = ($gridItem) ->
   $iframe = $gridItem.find "iframe"
   if $iframe
     resetAlliFrames()
-    $iframe.attr "src", $iframe.data("src")
-
+    $iframe.attr "src", ($iframe.data("src") + "?vq=tiny")
+    
 $ () ->
 
   $grid            = $ ".grid"
