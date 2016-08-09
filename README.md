@@ -17,7 +17,7 @@ There is also the option to filter the visible content according to a selected '
 
 - `dist/` is the destination for the compiled app. It has a `scripts/` folder which is the destination for all `.js` files, and a `styles/` folder which is the destination for `css`. All `html` files are copied into the root level of `dist/`, and since a static server is used, they are routed to urls automatically.
 - `.md.erb`, `.coffee`, `.sass`, `.css`, `.js`, and `.slim` source files can be present _anywhere in the file tree except `dist/`_. In this app, slim templates are written in the root level of `source/`, and other files are placed in `source/markdown`, `source/scripts`, and `source/styles`, but this organization is _not hard coded_.
-- The ui library is in `source/scripts/app.coffee`. It uses [isotope](http://isotope.metafizzy.co/) for the responsive grid,  `jquery`, and [curry](https://github.com/dominictarr/curry).
+- The ui library is in `source/scripts/app.coffee`. It uses [isotope](http://isotope.metafizzy.co/) for the responsive grid,  `jquery`, [pace](http://github.hubspot.com/pace/docs/welcome/), and [curry](https://github.com/dominictarr/curry).
 - [genrb](http://github.com/maxpleaner/genrb) provides `gen.rb` and the `Guardfile`.
   - `gen.rb` compiles `source/` into `dist/`. If given file paths as arguments, it will only compile those files, but otherwise will compile everything.
   - `Guardfile` uses [guard-livereload](https://github.com/guard/guard-livereload) and [guard-shell](https://github.com/guard/guard-shell) to make a pleasant development environment. With the livereload chrome extension, the browser won't need to be manually refreshed. The server shouln't need to be manually restarted if source files like `gen.rb` or `helpers.rb` are changed. `Guardfile` takes care of starting the static http server as well.
@@ -34,7 +34,7 @@ There is also the option to filter the visible content according to a selected '
   - `process_md_erb(absolute_path)` will compile a `.md.erb` file to html. This method returns `[html, metadata_hash]`
 - _grid_
   - `.grid` denotes a grid. There should be only one of these.
-  - `.grid-item` is a box in the grid. There are no exclicit defitions for 'columns' or 'rows' here - all that is handled dynamically by isotope. 
+  - `.grid-item` is a box in the grid. There are no exclicit defitions for 'columns' or 'rows' here - all that is handled dynamically by isotope.
   - inside `.grid-item` nodes, `.content` is initially hidden but is toggled open by clicking on the `.grid-item`.
   - Toggling content can be nested - just include another `.grid-item` inside `.content`
 
@@ -42,7 +42,7 @@ There is also the option to filter the visible content according to a selected '
 - _embedding_
   - `embed_md_erb(absolute_path)` is used to embed markdown files in one another.
 - _metadata_
-  - There is a special syntax used to create tag definitions for markdown files:  
+  - There is a special syntax used to create tag definitions for markdown files:
 ```txt
 **METADATA**
 TAGS: comma, separated, list, of, tags
@@ -60,6 +60,8 @@ TAGS: comma, separated, list, of, tags
 ### Starting the app
 
 `clone`, `bundle`, and `guard`, then visit `localhost:8000`
+
+To start over (and delete the demo code), just delete all the files in `source/markdown`
 
 ### Demo
 

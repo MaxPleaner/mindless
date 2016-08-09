@@ -1,8 +1,15 @@
 gridItemOnClick = ($grid, e) ->
   e.stopPropagation()
   $el = $ e.currentTarget
+  if $grid.find(".content:not(.hidden)").length > 0
+    hideAllContent($grid)
   $($el.find(".content")[0]).toggleClass "hidden"
+  bringBackiFrame($el)
   refreshGrid($grid)
+  
+hideAllContent = ($grid) ->
+  $grid.find(".content").addClass("hidden")
+  
 
 isotopeFilterFn = () ->
   tags = $(this).data("tags")
@@ -23,11 +30,11 @@ gridItemOnMouseleave = (e) ->
   $(e.currentTarget).removeClass("selected-grid-item")
 
 togglingContentOnMouseenter = (e) ->
-  $(e.currentTarget).parent(".grid-item")
+  $(e.currentTarget).parents(".grid-item")
                     .removeClass("selected-grid-item")
 
 togglingContentOnMouseleave = (e) ->
-  $(e.currentTarget).parent(".grid-item")
+  $(e.currentTarget).parents(".grid-item")
                     .addClass("selected-grid-item")
 
 setupGrid = ($grid, $gridItems, $togglingContent) ->
@@ -70,8 +77,9 @@ buildNavbarTagsMenu = ($grid, $metadata) ->
     $node = $ node
     nodeJson = $node.text()
     tags = JSON.parse(nodeJson)['tags']
-    $node.parent(".grid-item").data("tags", tags)
+    $node.parents(".grid-item").data("tags", tags)
     tags
+  tags = Array.from(new Set(tags))
   tags.forEach (tag) ->
       tagLink = $("<a></a>").html(tag)
                             .addClass("tagLink")
@@ -92,6 +100,22 @@ showAllButtonOnClick = ($grid, e) ->
   window.currentTag = undefined
   filterGrid($grid)
   e.preventDefault()
+  
+resetAlliFrames = () ->
+  $.each $("iframe"), (idx, node) ->
+    $node = $ node
+    src = $node.attr("src")
+    dataSrc = $node.data("src")
+    if src && src.length > 1
+      dataSrc = src
+    $node.data("src", dataSrc)
+    $node.attr("src", "")
+  
+bringBackiFrame = ($gridItem) ->
+  $iframe = $gridItem.find "iframe"
+  if $iframe
+    resetAlliFrames()
+    $iframe.attr "src", $iframe.data("src")
 
 $ () ->
 
@@ -103,7 +127,5 @@ $ () ->
   setupMetadata($grid, $metadata)
   loadInitialState($grid)
   setupGrid($grid, $gridItems, $togglingContent)
-  
-  
-  
+
     

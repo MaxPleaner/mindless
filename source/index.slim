@@ -2,11 +2,14 @@ doctype html
 html
   head
     title masonry-wiki
-    link rel='stylesheet' href='./styles/test.css'
+    link rel='stylesheet' href='./styles/app.css'
+    link rel='stylesheet' href='./styles/pace.css'
     script src='./scripts/jquery-3.1.0.min.js'
-    script src='./scripts/app.js'
+    script src='./scripts/pace.min.js'
     script src='./scripts/isotope.min.js'
     script src='./scripts/curry.min.js'
+    script src='./scripts/app.js'
   body
-    == render("_nav.slim")
-    == render("_wiki_grid.slim")
+    container#all-content
+      == render("_nav.slim")
+      == render("_wiki_grid.slim")
