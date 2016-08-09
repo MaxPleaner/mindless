@@ -1,5 +1,6 @@
 require 'nokogiri'
 require 'open-uri'
+require 'byebug'
 
 module Seed
   def self.create(options={})
@@ -24,6 +25,7 @@ module Seed
         title = link[0].gsub(/[^a-zA-Z1-9]/) { |x| " " }
         href = link[1]
         vid_id = href.split("list=")[-1]
+        next if vid_id.include?("/watch?") # sometimes regular videos find their way into the playlist search results
         content = <<-HTML
 <iframe width="560" height="315" data-src="https://www.youtube.com/embed/videoseries?list=#{vid_id}" frameborder="0" allowfullscreen></iframe>
         HTML
@@ -34,4 +36,8 @@ module Seed
   
 end
 
-Seed.seed_youtube_playlists ["wins", "fails"]
+Seed.seed_youtube_playlists [
+  "wins", "fails",
+  "avant-garde", "programming", "politics", "drums", "comedy", "breakcore",
+  "grindcore", "chiptune", "documentaries", "math rock", "experimental metal"
+]
