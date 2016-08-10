@@ -1,19 +1,18 @@
 (function() {
-  var addButtonToShowAll, bringBackiFrame, buildNavbarTagsMenu, filterGrid, finalize, gridItemOnClick, gridItemOnMouseenter, gridItemOnMouseleave, hideAllContent, isotopeFilterFn, loadInitialState, metadataOnClick, refreshGrid, resetAlliFrames, setupGrid, setupMetadata, showAllButtonOnClick, togglingContentOnMouseenter, togglingContentOnMouseleave;
+  var addButtonToShowAll, bringBackiFrame, buildNavbarTagsMenu, filterGrid, finalize, gridItemOnClick, gridItemOnMouseenter, gridItemOnMouseleave, isotopeFilterFn, loadInitialState, metadataOnClick, refreshGrid, resetAlliFrames, setupGrid, setupMetadata, showAllButtonOnClick, togglingContentOnMouseenter, togglingContentOnMouseleave;
 
   gridItemOnClick = function($grid, e) {
-    var $content, $el, contentAlreadyHidden, src;
+    var $content, $el, $otherContentAlreadyVisible, isThisContentAlreadyVisible, src;
     e.stopPropagation();
     $el = $(e.currentTarget);
     $content = $($el.find(".content")[0]);
-    if ($grid.find(".content:not(.hidden)").length > 0) {
-      contentAlreadyHidden = $content.hasClass("hidden");
-      hideAllContent($grid);
+    isThisContentAlreadyVisible = !$content.hasClass("hidden");
+    $otherContentAlreadyVisible = $grid.find(".content:not(.hidden)");
+    if ($otherContentAlreadyVisible.length > 0) {
+      $otherContentAlreadyVisible.addClass("hidden");
       resetAlliFrames();
-      if (contentAlreadyHidden) {
-        $content.removeClass("hidden");
-      }
-    } else {
+    }
+    if (!isThisContentAlreadyVisible) {
       $content.removeClass("hidden");
       src = $content.find("iframe").attr("src");
       if (!src || (src.length === 0)) {
@@ -21,10 +20,6 @@
       }
     }
     return refreshGrid($grid);
-  };
-
-  hideAllContent = function($grid) {
-    return $grid.find(".content").addClass("hidden");
   };
 
   isotopeFilterFn = function() {
@@ -93,7 +88,7 @@
       window.currentTags = currentTags;
       filterGrid($grid);
       return window.currentTags.forEach(function(tag) {
-        return $grid.find(".tagLink[data-tag='" + tag + "']").addClass("selectedTag");
+        return $(".tagLink[tag='" + tag + "']").addClass("selectedTag");
       });
     }
   };
@@ -140,7 +135,7 @@
     tags = Array.from(new Set(tags));
     tags.forEach(function(tag) {
       var tagLink;
-      tagLink = $("<a></a>").html(tag).addClass("tagLink").data("tag", tag).attr("href", "#");
+      tagLink = $("<a></a>").html(tag).addClass("tagLink").attr("tag", tag).attr("href", "#");
       return $navbarTagsMenu.append(tagLink);
     });
     addButtonToShowAll($grid, $navbarTagsMenu);
@@ -158,7 +153,8 @@
     window.location.hash = "";
     window.currentTags = void 0;
     filterGrid($grid);
-    return e.preventDefault();
+    e.preventDefault();
+    return $(".selectedTag").removeClass("selectedTag");
   };
 
   resetAlliFrames = function() {
@@ -193,9 +189,9 @@
     $togglingContent = $gridItems.find(".content");
     $metadata = $grid.find(".metadata");
     setupMetadata($grid, $metadata);
-    loadInitialState($grid);
     finalize();
-    return setupGrid($grid, $gridItems, $togglingContent);
+    setupGrid($grid, $gridItems, $togglingContent);
+    return loadInitialState($grid);
   });
 
 }).call(this);
