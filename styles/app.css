@@ -1,6 +1,9 @@
 html {
   background-color: rgba(0, 0, 0, 0.1); }
 
+body {
+  font-family: "Courier New", Courier, monospace; }
+
 a, a:visited, a:hover {
   color: darkblue;
   font-style: italic;
@@ -19,7 +22,7 @@ a, a:visited, a:hover {
 
 .tagLink, .showAllLink {
   float: left;
-  border: 1px solid black;
+  border: 1px solid pink;
   border-radius: 5px;
   padding: 10px;
   margin: 5px;
@@ -33,7 +36,7 @@ a, a:visited, a:hover {
   clear: left; }
 
 .showAllLink {
-  border: 1px solid darkred; }
+  border: 1px solid orange; }
 
 .grid {
   clear: both;
