@@ -2,15 +2,16 @@ gridItemOnClick = ($grid, e) ->
   e.stopPropagation()
   $el = $ e.currentTarget
   $content = $ $el.find(".content")[0]
-  $contentAlreadyVisible = $grid.find(".content:not(.hidden)")
-  if $contentAlreadyVisible.length > 0
-    $contentAlreadyVisible.addClass "hidden"
+  isThisContentAlreadyVisible = ! $content.hasClass("hidden")
+  $otherContentAlreadyVisible = $grid.find(".content:not(.hidden)")
+  if $otherContentAlreadyVisible.length > 0
+    $otherContentAlreadyVisible.addClass "hidden"
     resetAlliFrames()
-  else
+  if ! isThisContentAlreadyVisible
+    $content.removeClass("hidden")
     src = $content.find("iframe").attr "src"
     if !src || (src.length == 0)
       bringBackiFrame $el
-  $content.removeClass("hidden")
   refreshGrid $grid
   
 isotopeFilterFn = () ->
@@ -61,8 +62,8 @@ loadInitialState = ($grid) ->
     window.currentTags = currentTags
     filterGrid $grid
     window.currentTags.forEach (tag) ->
-      $grid.find(".tagLink[data-tag='#{tag}']").addClass("selectedTag")
-
+      $(".tagLink[tag='#{tag}']").addClass("selectedTag")
+      
 metadataOnClick = ($grid, e) ->
   $node = $ e.currentTarget
   tag = $node.text()
@@ -97,7 +98,7 @@ buildNavbarTagsMenu = ($grid, $metadata) ->
   tags.forEach (tag) ->
       tagLink = $("<a></a>").html(tag)
                             .addClass("tagLink")
-                            .data("tag", tag)
+                            .attr("tag", tag)
                             .attr("href", "#")
       $navbarTagsMenu.append tagLink
   addButtonToShowAll $grid, $navbarTagsMenu
@@ -115,6 +116,7 @@ showAllButtonOnClick = ($grid, e) ->
   window.currentTags = undefined
   filterGrid $grid
   e.preventDefault()
+  $(".selectedTag").removeClass("selectedTag")
   
 resetAlliFrames = () ->
   $node = window.$activeIframe
@@ -143,8 +145,8 @@ $ () ->
   $metadata        = $grid.find ".metadata"
   
   setupMetadata $grid, $metadata
-  loadInitialState $grid
   finalize()
   setupGrid $grid, $gridItems, $togglingContent
+  loadInitialState $grid
 
     
